@@ -1,14 +1,14 @@
 {
   "devDependencies": {
-    "@fitbit/sdk": "~6.1.0",
-    "@fitbit/sdk-cli": "^1.7.3"
+    "@fitbit/sdk": "~6.2.0-pre.1",
+    "@fitbit/sdk-cli": "~1.8.0-pre.10"
   },
   "name": "homeassistant",
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
   "fitbit": {
-    "appUUID": "158edb1c-f748-4dbf-a682-b9dae2b74457",
+    "appUUID": "fbd92642-1c27-4d81-8204-6ffdbc8ff109",
     "appType": "app",
     "appDisplayName": "HA Remote",
     "iconFile": "resources/icon.png",
@@ -18,7 +18,8 @@
     ],
     "buildTargets": [
       "atlas",
-      "vulcan"
+      "vulcan",
+      "rhea"
     ],
     "i18n": {
       "en-US": {
