@@ -16,6 +16,8 @@ AddressText.text = gettext("unavailable");
 
 // Load settings
 let settings = loadSettings();
+let deadbolt = true;
+let deadboltInterval = 8000; // This has to be the time to open the lock + the time to close it again
 
 // Register for the unload event
 me.onunload = saveSettings;
@@ -29,6 +31,11 @@ const NextStates = {
     opening: "close_cover",
     closing: "open_cover",
     closed: "open_cover",
+    unlocked: "lock",
+    locked: "unlock",
+    locking: "unlock",
+    unlock: "unlock", // Allow to unlock when state was not updated
+}
 }
 
 // Update list data
@@ -72,6 +79,14 @@ messaging.peerSocket.onmessage = (evt) => {
                 //DEBUG console.log(`Updated: ${evt.data.id} to ${evt.data.state}`);
                 Entities[index].state = evt.data.state;
                 setupList(EntityList, Entities);
+
+                // If the request was to the doorlock entity and the state is unlock, update the state to locking after deadbolt interval ( assuming there is a deadbolt feature )
+                if (evt.data.id === "lock.doorlock" && evt.data.state === "unlock" && deadbolt) {
+                    setTimeout(() => {
+                        Entities[index].state = "locking";
+                        setupList(EntityList, Entities);
+                    }, deadboltInterval);
+                }
             }
         })
     }
@@ -131,6 +146,11 @@ function loadSettings() {
             port: "8123",
             token: "",
             force: true
+            entities: [
+                {name: "lock.doorlock"},
+                {name: "light.bedroom"},
+                {name: "media_player.bedroom_tv"},
+            ]
         };
     }
 }
